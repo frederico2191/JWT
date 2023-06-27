@@ -11,6 +11,7 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 #from models import Person
 
@@ -18,6 +19,9 @@ ENV = os.getenv("FLASK_ENV")
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET')
+
+jwt = JWTManager(app)
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
@@ -53,6 +57,28 @@ def sitemap():
     if ENV == "development":
         return generate_sitemap(app)
     return send_from_directory(static_file_dir, 'index.html')
+
+
+@app.route("/token", methods=["GET"])
+def create_token():
+    username = request.args.get("username", None)
+    password = request.args.get("password", None)
+    # Query your database for username and password
+    # user = User.query.filter_by(username=username, password=password).first()
+    if username != password:
+        # the user was not found on the database
+        return jsonify({"msg": "Bad username or password"}), 401
+
+    # create a new token with the user id inside
+    access_token = create_access_token(identity=username)
+    return jsonify({ "token": access_token, "userName": username })
+
+@app.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    username = request.args.get("username", None)
+    current_user_id = get_jwt_identity()
+    return jsonify({  "userName": str(current_user_id) + str(username)  + " Accessed" })
 
 # any other endpoint will try to serve it like a static file
 @app.route('/<path:path>', methods=['GET'])
