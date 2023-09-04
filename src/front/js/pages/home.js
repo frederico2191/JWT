@@ -9,7 +9,7 @@ export const Home = () => {
 
   const { store, actions } = useContext(Context);
   const handleLoginClick = () => {
-    actions.login("amigos@gmail.com", "1234");
+    // actions.login("amigos@gmail.com", "1234");
     navigate("/login");
   };
   const handleSignupClick = () => {
@@ -21,8 +21,12 @@ export const Home = () => {
       <h1>Let's Login</h1>
       <p></p>
 
-      <button className="btn btn-primary mx-3" onClick={handleLoginClick}>Login</button>
-      <button className="btn btn-primary" onClick={handleSignupClick}>Sign-Up</button>
+      <button className="btn btn-primary mx-3" onClick={handleLoginClick}>
+        Login
+      </button>
+      <button className="btn btn-primary" onClick={handleSignupClick}>
+        Sign-Up
+      </button>
     </div>
   );
 };
