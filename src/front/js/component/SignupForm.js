@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
-import SignupForm from "../component/SignupForm";
 
-export const Signup = () => {
+const SignupForm = () => {
   const { store, actions } = useContext(Context);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,5 +16,29 @@ export const Signup = () => {
     if (registration == "400") alert("user already exists");
     if (registration == "200") navigate("/login");
   };
-  return <SignupForm />;
+  return (
+    <div>
+      <div className="text-center">
+        <h1>Sign-Up</h1>
+
+        <div>
+          <input
+            type="text"
+            placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></input>
+          <button onClick={handleSubmit}>Register</button>
+        </div>
+      </div>
+    </div>
+  );
 };
+
+export default SignupForm;

@@ -15,13 +15,11 @@ const LoginForm = () => {
     e.preventDefault();
     console.log("entered the click");
     const authentication = await actions.login({ email, password });
-    console.log("result from sign up registrsation::", authentication);
+    console.log("result from sign up authentication::", authentication);
     console.log("fetch attempted to sign up email: ", email);
     console.log("fetch attempted to sign up password: ", password);
-    // if (authentication == "400") alert("wrong password or email address");
-    // if (registration == "200") navigate("/private");
-    console.log("i did the fetch.");
-    navigate("/private");
+    if (authentication == "400") alert("wrong password or email address");
+    if (authentication == true) navigate("/private");
   };
   return (
     <form onSubmit={handleClick}>
